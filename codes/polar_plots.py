@@ -8,11 +8,6 @@ import matplotlib as mpl
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy.interpolate import griddata
 
-from histogram_plots import brzl_hist
-
-# Imprt gaussian processed from sklearn.
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
 
 # Activate the latex text rendering.
 plt.rc("text", usetex=True)
@@ -141,4 +136,4 @@ axs[1, 1].set_xlabel(r"$X$ [AU]", fontsize=10)
 axs[1, 1].set_title("Linear", fontsize=10)
 
 # Save the figure.
-plt.savefig("../figures/uy_Tp_interp.pdf", dpi=300, bbox_inches="tight", pad_inches=0.1)
+plt.savefig("../figures/uy_Tp_interp.png", dpi=300, bbox_inches="tight", pad_inches=0.1)
