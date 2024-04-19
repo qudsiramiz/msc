@@ -1,15 +1,11 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import h5py as hf
-import matplotlib as mpl
 
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel, Matern
 from sklearn.model_selection import train_test_split
 
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-from scipy import stats
 
 # Activate the latex text rendering.
 plt.rc("text", usetex=True)
@@ -107,7 +103,7 @@ kernel = ConstantKernel(guess_n, bounds_n) * RBF(guess_l, bounds_l) + Matern(
 )
 
 X_train, X_test, Y_train, Y_test = train_test_split(
-    X, Z, test_size=0.95, random_state=0
+    X, Z, test_size=0.05, random_state=0
 )
 gpr = GaussianProcessRegressor(
     kernel=kernel, alpha=0.01, n_restarts_optimizer=10, normalize_y=True
@@ -132,7 +128,9 @@ axs.contour(x, y, lev, colors="k", linewidths=0.5)
 axs.plot(*X_train.T, "k.", markersize=1)
 axs.contour(x, y, Zfit, lev, colors="r", linewidths=0.5, ls="--")
 plt.tight_layout()
-plt.savefig("../figures/all_Tp_gp.png", dpi=300, bbox_inches="tight", pad_inches=0.1)
+plt.savefig(
+    "../figures/all_Tp_gp_20240403.png", dpi=300, bbox_inches="tight", pad_inches=0.1
+)
 
 """
 # Flatten x_grid, y_grid, and Tp_grid.

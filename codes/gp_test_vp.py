@@ -18,6 +18,7 @@ from sklearn.model_selection import train_test_split
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy import stats
 
+"""
 # Activate the latex text rendering.
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif")
@@ -40,7 +41,7 @@ df = df[(df["sc_r"] >= 0.1) & (df["sc_r"] <= r_lim)]
 #     df[key] = data[key][:]
 
 # Define the key to be used
-gp_key = "Tp"
+gp_key = "vp_m"
 # Get rid of all the rows where Tp is NaN.
 df = df[np.isfinite(df[gp_key][:])]
 
@@ -99,12 +100,7 @@ guess_l = (1.0, 1.0)
 bounds_l = ((1e-3, 1e0), (1e-3, 1e0))
 guess_n = 1
 bounds_n = (1e-10, 1e1)
-# kernel = DotProduct(sigma_0=1)
-# kernel = ConstantKernel(guess_n, bounds_n) * RBF(guess_l, bounds_l) + Matern(
-#     guess_l, bounds_l
-# )
-# kernel = DotProduct(sigma_0=1) * Matern(length_scale=1, nu=2.5)
-kernel = ConstantKernel(1.0, (1e-3, 1e3)) + DotProduct(sigma_0=2) + WhiteKernel(1e-3)
+kernel = DotProduct(sigma_0=1)
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Z, test_size=0.1, random_state=0)
 
@@ -122,7 +118,7 @@ Zsigma_all = ZsigmaA_all.reshape(x_grid.shape)
 
 # Ignnore values lower than 1e3.
 # Zall[Zall < 1e3] = np.nan
-
+"""
 # Plot the results.
 fig, axs = plt.subplots(2, 2, figsize=(8, 4.5), sharex=True)
 fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
@@ -133,11 +129,11 @@ im1 = axs[0, 0].pcolormesh(
     10 ** (y_grid),
     Zall.T,
     cmap="viridis_r",
-    norm=mpl.colors.LogNorm(vmin=1e4, vmax=3e5),
+    norm=mpl.colors.LogNorm(),
 )
 axs[0, 0].set_xlabel(r"$x$ (AU)", fontsize=10)
 axs[0, 0].set_ylabel(r"$y$ (AU)", fontsize=10)
-axs[0, 0].set_title(r"$T_p$ (K)", fontsize=10)
+axs[0, 0].set_title(r"$V_p$ (km/s)", fontsize=10)
 # Set both axes to log scale.
 axs[0, 0].set_xscale("log")
 axs[0, 0].set_yscale("log")
@@ -188,4 +184,6 @@ cbar3.ax.tick_params(labelsize=10)
 axs[1, 1].axis("off")
 
 # Save the figure.
-plt.savefig(f"../figures/{gp_key}gp_ext_all_20240403.png", dpi=300, bbox_inches="tight")
+plt.savefig(
+    f"../figures/{gp_key}_gp_ext_all_20240403.png", dpi=300, bbox_inches="tight"
+)
