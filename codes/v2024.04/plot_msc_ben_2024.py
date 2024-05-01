@@ -107,7 +107,7 @@ def plot_msc(key, scaled=True):
         dkey = "bm"
         lab_name = r"Magnetic Field Strength"
         lab_sym = r"B"
-        lab_unit = r"{\rm nT}"
+        lab_unit = r"{nT}"
         corner = 3
         yscale = "log"
         ylim_scaled = [0.003, 300.0]
@@ -116,8 +116,8 @@ def plot_msc(key, scaled=True):
     elif key == "np":
         dkey = "np"
         lab_name = r"Proton Density"
-        lab_sym = r"n_{\rm p}"
-        lab_unit = r"{\rm cm}^{-3}"
+        lab_sym = r"n_{p}"
+        lab_unit = r"{cm}^{-3}"
         corner = 3
         yscale = "log"
         ylim_scaled = [0.00008, 5000.0]
@@ -126,8 +126,8 @@ def plot_msc(key, scaled=True):
     elif key == "vp":
         dkey = "vp_m"
         lab_name = r"Proton Speed"
-        lab_sym = r"v_{\rm p}"
-        lab_unit = r"{\rm km}/{\rm s}"
+        lab_sym = r"v_{p}"
+        lab_unit = r"{km}/{s}"
         corner = 3
         yscale = "linear"
         ylim_scaled = [0.0, 1.5]
@@ -136,8 +136,8 @@ def plot_msc(key, scaled=True):
     elif key == "vpr":
         dkey = "vp_r"
         lab_name = r"Proton Radial Speed"
-        lab_sym = r"v_{{\rm p}r}"
-        lab_unit = r"{\rm km}/{\rm s}"
+        lab_sym = r"v_{{p}r}"
+        lab_unit = r"{km}/{s}"
         corner = 3
         yscale = "linear"
         ylim_scaled = [0.0, 1.5]
@@ -146,8 +146,8 @@ def plot_msc(key, scaled=True):
     elif key == "tp":
         dkey = "Tp"
         lab_name = r"Proton Temperature"
-        lab_sym = r"T_{\rm p}"
-        lab_unit = r"{\rm K}"
+        lab_sym = r"T_{p}"
+        lab_unit = r"{K}"
         corner = 1
         yscale = "log"
         ylim_scaled = [0.01, 100.0]
@@ -156,8 +156,8 @@ def plot_msc(key, scaled=True):
     elif key == "va":
         dkey = "vA"
         lab_name = r"Alfv\'en Speed"
-        lab_sym = r"v_{\rm A}"
-        lab_unit = r"{\rm km}/{\rm s}"
+        lab_sym = r"v_{A}"
+        lab_unit = r"{km}/{s}"
         corner = 3
         yscale = "log"
         ylim_scaled = [0.07, 8.0]
@@ -166,7 +166,7 @@ def plot_msc(key, scaled=True):
     elif key == "na":
         dkey = "alfven_ratio"
         lab_name = r"Alfv\'en Number"
-        lab_sym = r"(v_{\rm p}/v_{\rm A})"
+        lab_sym = r"(v_{p}/v_{A})"
         lab_unit = None
         corner = 4
         yscale = "log"
@@ -177,8 +177,8 @@ def plot_msc(key, scaled=True):
         dkey = "parker_angle"
         lab_name = r"Parker-Angle"
         # lab_sym = r'\arccos\lvert\hat{\bf B}\cdot\hat{\bf r}\rvert'
-        lab_sym = r"\arccos \lvert"
-        lab_unit = r"{\rm deg}"
+        lab_sym = r"\\arccos \\lvert"
+        lab_unit = r"{deg}"
         corner = 4
         yscale = "linear"
         ylim_scaled = [0.0, 2.0]
@@ -187,8 +187,8 @@ def plot_msc(key, scaled=True):
     elif key == "loss":
         dkey = "particle_flux"
         lab_name = r"Proton Loss Rate"
-        lab_sym = r"4 \pi r^2 n_{\rm p} v_{\rm p}"
-        lab_unit = r"10^{36}/{\rm s}"
+        lab_sym = r"4 \pi r^2 n_{p} v_{p}"
+        lab_unit = r"10^{36}/{s}"
         corner = 2
         yscale = "linear"
         ylim_scaled = [0.0, 3.9]
@@ -198,7 +198,7 @@ def plot_msc(key, scaled=True):
         dkey = "heliographicLatitude"
         lab_name = r"Heliographic-Latitude"
         lab_sym = r"\lambda"
-        lab_unit = r"{\rm deg}"
+        lab_unit = r"{deg}"
         corner = 3
         yscale = "linear"
         ylim_scaled = [-180.0, 540.0]
@@ -208,7 +208,7 @@ def plot_msc(key, scaled=True):
         dkey = "heliographicLongitude"
         lab_name = r"Heliographic-Longitude"
         lab_sym = r"\lambda"
-        lab_unit = r"{\rm deg}"
+        lab_unit = r"{deg}"
         corner = 3
         yscale = "linear"
         ylim_scaled = [-180.0, 540.0]
@@ -217,7 +217,7 @@ def plot_msc(key, scaled=True):
     elif key == "proton_beta":
         dkey = "proton_beta"
         lab_name = r"Proton-Beta"
-        lab_sym = r"\beta_{\rm p}"
+        lab_sym = r"\beta_{p}"
         lab_unit = None
         corner = 3
         yscale = "log"
@@ -227,7 +227,7 @@ def plot_msc(key, scaled=True):
     elif key == "alfven_ratio":
         dkey = "proton_beta"
         lab_name = r"Alfven-Ratio"
-        lab_sym = r"v_{\rm mp}/v_{\rm A}"
+        lab_sym = r"v_{mp}/v_{A}"
         lab_unit = None
         corner = 3
         yscale = "log"
@@ -236,7 +236,7 @@ def plot_msc(key, scaled=True):
         unit = 1.0
 
     # Generate the y-axis label for the individual plot.
-    ylabel_indiv = r"\rm "
+    ylabel_indiv = r""
 
     if lab_unit is None:
         ylabel_indiv += lab_name + r", $" + lab_sym + "$"
@@ -245,7 +245,7 @@ def plot_msc(key, scaled=True):
 
     # Generate the y-axis label for the composite plot.
 
-    ylabel_comp = r"\rm "
+    ylabel_comp = r""
 
     if scaled:
         ylabel_comp += (
@@ -267,11 +267,11 @@ def plot_msc(key, scaled=True):
 
     xlim = [0.05, 150.0]
     xscale = "log"
-    xlabel = r"\rm Distance from Sun, $r$ [au]"
+    xlabel = r"Distance from Sun, $r$ [au]"
 
     hlim = [10.0**0, 10.0**4.2]  # [10.**1.1, 10.**4.2]
     hscale = "log"
-    hlabel = r"\rm Intervals"
+    hlabel = r"Intervals"
 
     ylim_indiv = ylim_scaled if scaled else ylim_unscaled
     ylim_comp = ylim_scaled if scaled else ylim_unscaled
@@ -431,18 +431,19 @@ def plot_msc(key, scaled=True):
     n_sc = 12
 
     sc_name = [
-        r"$\rm PSP$",
-        r"$\rm Helios~1$",
-        r"$\rm Helios~2$",
-        r"$\rm Ulysses$",
-        r"$\rm Mariner~2$",
-        r"$\rm Mariner~10$",
-        r"$\rm Cassini$",
-        r"$\rm Pioneer~10$",
-        r"$\rm Pioneer~11$",
-        r"$\rm New~Horizons$",
-        r"$\rm Voyager~1$",
-        r"$\rm Voyager~2$",
+        r"$PSP$",
+        r"$Helios~1$",
+        r"$Helios~2$",
+        r"$Ulysses$",
+        r"$Mariner~2$",
+        r"$Mariner~10$",
+        # r"$Cassini$",
+        r"$SolO$",
+        r"$Pioneer~10$",
+        r"$Pioneer~11$",
+        r"$New~Horizons$",
+        r"$Voyager~1$",
+        r"$Voyager~2$",
     ]
 
     sc_color = [
@@ -482,13 +483,16 @@ def plot_msc(key, scaled=True):
     ]
 
     if scaled:
-        p1 = "/mnt/cephadrius/udel_research/msc/data/binned/scaled/v2024.1/"
+        # p1 = "/mnt/cephadrius/udel_research/msc/data/binned/scaled/v2024.04/"
+        p1 = (
+            "/home/vetinari/Desktop/git/msc/data/v2024.04/individual_spc/binned_scaled/"
+        )
         p2 = "_coho1hr_merged_mag_plasma_"
-        p3 = "_80_binned_scaled_v2024.1.hf"
+        p3 = "_80_binned_scaled_v2024.04.hf"
     else:
-        p1 = "/mnt/cephadrius/udel_research/msc/data/binned/unscaled/v2024.1/"
+        p1 = "/home/vetinari/Desktop/git/msc/data/v2024.04/individual_spc/binned_unscaled/"
         p2 = "_coho1hr_merged_mag_plasma_"
-        p3 = "_v2024.1.hf"
+        p3 = "_v2024.04.hf"
 
     sc_fl = [
         p1 + "psp" + p2 + "20180101_20231001" + p3,
@@ -497,10 +501,11 @@ def plot_msc(key, scaled=True):
         p1 + "uy" + p2 + "19900101_19920201" + p3,
         p1 + "mariner2" + p2 + "19620830_19621116" + p3,
         p1 + "mariner10" + p2 + "19731103_19740918" + p3,
-        p1 + "cassini" + p2 + "20000101_20040101" + p3,
+        # p1 + "cassini" + p2 + "20000101_20040101" + p3,
+        p1 + "solo" + p2 + "20200101_20231201" + p3,
         p1 + "pioneer10" + p2 + "19720101_19950901" + p3,
         p1 + "pioneer11" + p2 + "19730101_19941201" + p3,
-        p1 + "new_horizons" + p2 + "20081010_20230731" + p3,
+        p1 + "newhorizons" + p2 + "20081010_20230731" + p3,
         p1 + "voyager1" + p2 + "19770101_20181201" + p3,
         p1 + "voyager2" + p2 + "19770101_20181201" + p3,
     ]
@@ -585,12 +590,12 @@ def plot_msc(key, scaled=True):
 
     # Load data for and populate the composite.
 
-    p = "/mnt/cephadrius/udel_research/msc/data/all_data/v2024.1/all_spacecraft_data_"
+    p = "/home/vetinari/Desktop/git/msc/data/v2024.04/all_spc/all_spacecraft_data"
 
     if scaled:
-        dat = h5py.File(p + "scaled_80_binned_v2024.1.hf", "r")
+        dat = h5py.File(p + "_scaled_80_binned_v2024.04.hf", "r")
     else:
-        dat = h5py.File(p + "_80_binned_v2024.1.hf", "r")
+        dat = h5py.File(p + "_80_binned_v2024.04.hf", "r")
 
     dat_r = np.array(dat["sc_r_iqr_50"])
     dat_10 = np.array(dat[dkey + "_iqr_10"])
@@ -752,7 +757,7 @@ def plot_msc(key, scaled=True):
         txt_rc_a = r"$r_c=\left({:.2f}\pm {:.2f}".format(
             fit[0][1], np.sqrt(fit[1][1][1])
         )
-        txt_rc_b = r"\right)\,{\rm au}$"
+        txt_rc_b = r"\right)\,{au}$"
 
         arr_txt = [txt_rc_a + txt_rc_b, txt_a2, txt_a1]
 
@@ -871,8 +876,8 @@ def plot_msc(key, scaled=True):
         txt_ra = r"$r_a=\left({:.2f}\pm {:.2f}".format(fit[0][1], np.sqrt(fit[1][1][1]))
         txt_rb = r"$r_b=\left({:.2f}\pm {:.2f}".format(fit[0][2], np.sqrt(fit[1][2][2]))
 
-        txt_ra += r"\right)\,{\rm au}$"
-        txt_rb += r"\right)\,{\rm au}$"
+        txt_ra += r"\right)\,{au}$"
+        txt_rb += r"\right)\,{au}$"
 
         arr_txt = [txt_rb, txt_ra, txt_a3, txt_a2, txt_a1]
 
@@ -894,17 +899,17 @@ def plot_msc(key, scaled=True):
 
     if scaled:
         # fname = 'svg/plot_scaled_' + key + '.svg'
-        fname = "/home/cephadrius/Dropbox/v19/plot_scaled_" + key + ".pdf"
+        fname = "/home/vetinari/Desktop/git/msc/figures/plot_scaled_" + key + ".pdf"
     else:
         # fname = 'svg/plot_unscaled_' + key + '.svg'
-        fname = "/home/cephadrius/Dropbox/v19/plot_unscaled_" + key + ".pdf"
+        fname = "/home/vetinari/Desktop/git/msc/figures/plot_unscaled_" + key + ".pdf"
 
     plt.savefig(fname, dpi=300, bbox_inches="tight", pad_inches=0.02, transparent=False)
 
 
 # Generate the figures.
 
-n_arr = 10
+n_arr = 0
 arr_key = [
     "b",
     "np",
@@ -925,7 +930,7 @@ r_bin = np.logspace(r_min, r_max, n_bin)
 
 # arr_scaled = [True, True, True, True, True, True, False, True, False, False]
 
-for i in range(8, 9):
+for i in range(0, 9):
     print(arr_key[i])
     for scaled in [False, True]:
         plot_msc(arr_key[i], scaled=scaled)
