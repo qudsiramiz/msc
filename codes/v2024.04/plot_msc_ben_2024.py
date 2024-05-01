@@ -423,12 +423,11 @@ def plot_msc(key, scaled=True):
     # If relevant, add the unit-scale axis.
 
     if scaled:
-
         fig_comp.plot(xlim, [1.0, 1.0], color="k", linewidth=0.5, linestyle=":")
 
     # Load data for and populate the individual plot and histogram.
 
-    n_sc = 12
+    n_sc = 13
 
     sc_name = [
         r"$PSP$",
@@ -437,13 +436,13 @@ def plot_msc(key, scaled=True):
         r"$Ulysses$",
         r"$Mariner~2$",
         r"$Mariner~10$",
-        # r"$Cassini$",
-        r"$SolO$",
+        r"$Cassini$",
         r"$Pioneer~10$",
         r"$Pioneer~11$",
         r"$New~Horizons$",
         r"$Voyager~1$",
         r"$Voyager~2$",
+        r"$SolO$",
     ]
 
     sc_color = [
@@ -459,19 +458,21 @@ def plot_msc(key, scaled=True):
         "tab:red",
         "tab:blue",
         "tab:cyan",
+        "tab:red",
     ]
 
-    sc_marker = ["d", "^", "v", "o", "P", "X", "p", "<", ">", "*", "s", "D"]
+    sc_marker = ["d", "^", "v", "o", "P", "X", "p", "<", ">", "*", "s", "D", "H"]
 
-    sc_markeredgewidth = [0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0]
+    sc_markeredgewidth = [0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    sc_markersize = [3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3]
+    sc_markersize = [3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3]
 
     sc_markeredgecolor = [
         None,
         None,
         None,
         "k",
+        None,
         None,
         None,
         None,
@@ -499,13 +500,13 @@ def plot_msc(key, scaled=True):
         p1 + "uy" + p2 + "19900101_19920201" + p3,
         p1 + "mariner2" + p2 + "19620830_19621116" + p3,
         p1 + "mariner10" + p2 + "19731103_19740918" + p3,
-        # p1 + "cassini" + p2 + "20000101_20040101" + p3,
-        p1 + "solo" + p2 + "20200101_20231201" + p3,
+        p1 + "cassini" + p2 + "20000101_20040101" + p3,
         p1 + "pioneer10" + p2 + "19720101_19950901" + p3,
         p1 + "pioneer11" + p2 + "19730101_19941201" + p3,
         p1 + "newhorizons" + p2 + "20081010_20230731" + p3,
         p1 + "voyager1" + p2 + "19770101_20181201" + p3,
         p1 + "voyager2" + p2 + "19770101_20181201" + p3,
+        p1 + "solo" + p2 + "20200101_20231201" + p3,
     ]
 
     for sc in range(n_sc):
@@ -560,14 +561,14 @@ def plot_msc(key, scaled=True):
 
         # Populate the key.
 
-        x_sc = sc // 3
-        y_sc = 2 - (sc % 3)
+        x_sc = sc // 4
+        y_sc = 2 - (sc % 4)
 
         opt_sc = 0.0 if (x_sc == 0) else -0.15
 
         fig_key.plot(
             [x_sc + 0.1 + opt_sc],
-            [y_sc + 0.5],
+            [y_sc + 1],
             linestyle="",
             color=sc_color[sc],
             marker=sc_marker[sc],
@@ -578,12 +579,18 @@ def plot_msc(key, scaled=True):
 
         fig_key.annotate(
             sc_name[sc],
-            (x_sc + 0.175 + opt_sc, y_sc + 0.5),
+            (x_sc + 0.175 + opt_sc, y_sc + 1),
             xycoords="data",
             color="k",
             size="x-small",
             horizontalalignment="left",
-            verticalalignment="center",
+            verticalalignment="top",
+            # bbox=dict(
+            #     boxstyle="round,pad=0.4",
+            #     facecolor="white",
+            #     edgecolor="red",
+            #     linewidth=1,
+            # ),
         )
 
     # Load data for and populate the composite.
@@ -919,14 +926,14 @@ arr_key = [
     "proton_beta",
     "alfven_ratio",
 ]
-r_min = -1.2
+r_min = -1.4
 r_max = 2
 n_bin = 80
 r_bin = np.logspace(r_min, r_max, n_bin)
 
 # arr_scaled = [True, True, True, True, True, True, False, True, False, False]
 
-for i in range(8, 9):
+for i in range(1):
     print(arr_key[i])
     try:
         for scaled in [False, True]:

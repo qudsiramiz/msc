@@ -33,7 +33,7 @@ def trace_func(df=None, key_list=None):
     kb = 1.38e-23
 
     df_omni_o = pd.read_pickle(
-        "/mnt/cephadrius/udel_research/msc/omni/data/processed/v2024.1/omni_coho1hr_merged_mag_plasma_19630101_20240401_v2024.1.p"
+        "/mnt/cephadrius/udel_research/msc/omni/data/processed/v2024.5/omni_coho1hr_merged_mag_plasma_19630101_20240401_v2024.5.p"
     )
 
     # Drop the "Epoch" and "ssepoch" columns from the DataFrame
@@ -117,7 +117,7 @@ def bin_data(
     filename=None,
     filetype="pickle",
     n_bin=100,
-    file_version="v2024.1",
+    file_version="v2024.05",
     key_list=None,
 ):
     """Define the function which takes a Pandas DataFrame and file name with number
@@ -204,7 +204,7 @@ def bin_data(
     return dfn
 
 
-r_min = -1.2
+r_min = -1.4
 r_max = 2
 n_bin = 80
 r_bin = np.logspace(r_min, r_max, n_bin)
@@ -215,10 +215,10 @@ binned_values = [True, False]
 for scaled in scaled_values:
     for binning in binned_values:
         fnames = np.sort(
-            glob("/mnt/cephadrius/udel_research/msc/data/merged_1hr/v2024.1/*.p")
+            glob("/mnt/cephadrius/udel_research/msc/data/merged_1hr/v2024.5/*.p")
         )
 
-        file_version = "v2024.1"
+        file_version = "v2024.5"
         df_all_l = []
 
         for f in fnames[0:]:
