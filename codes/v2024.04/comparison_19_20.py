@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import h5py as hf
 
-p1_19 = "/home/vetinari/Desktop/git/msc/data/binned_unscaled_v19/v19/"
+p1_19 = "../../data/binned_unscaled_v19/v19/"
 p2_19 = "_coho1hr_merged_mag_plasma_"
 p3_19 = "_v07_80_binned_v19.p"
 
