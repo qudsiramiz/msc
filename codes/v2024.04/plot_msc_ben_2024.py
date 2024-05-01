@@ -484,13 +484,11 @@ def plot_msc(key, scaled=True):
 
     if scaled:
         # p1 = "/mnt/cephadrius/udel_research/msc/data/binned/scaled/v2024.04/"
-        p1 = (
-            "/home/vetinari/Desktop/git/msc/data/v2024.04/individual_spc/binned_scaled/"
-        )
+        p1 = "../../data/v2024.04/individual_spc/binned_scaled/"
         p2 = "_coho1hr_merged_mag_plasma_"
         p3 = "_80_binned_scaled_v2024.04.hf"
     else:
-        p1 = "/home/vetinari/Desktop/git/msc/data/v2024.04/individual_spc/binned_unscaled/"
+        p1 = "../../data/v2024.04/individual_spc/binned_unscaled/"
         p2 = "_coho1hr_merged_mag_plasma_"
         p3 = "_v2024.04.hf"
 
@@ -590,7 +588,7 @@ def plot_msc(key, scaled=True):
 
     # Load data for and populate the composite.
 
-    p = "/home/vetinari/Desktop/git/msc/data/v2024.04/all_spc/all_spacecraft_data"
+    p = "../../data/v2024.04/all_spc/all_spacecraft_data"
 
     if scaled:
         dat = h5py.File(p + "_scaled_80_binned_v2024.04.hf", "r")
@@ -899,17 +897,15 @@ def plot_msc(key, scaled=True):
 
     if scaled:
         # fname = 'svg/plot_scaled_' + key + '.svg'
-        fname = "/home/vetinari/Desktop/git/msc/figures/plot_scaled_" + key + ".pdf"
+        fname = "../../figures/plot_scaled_" + key + ".pdf"
     else:
         # fname = 'svg/plot_unscaled_' + key + '.svg'
-        fname = "/home/vetinari/Desktop/git/msc/figures/plot_unscaled_" + key + ".pdf"
+        fname = "../../figures/plot_unscaled_" + key + ".pdf"
 
     plt.savefig(fname, dpi=300, bbox_inches="tight", pad_inches=0.02, transparent=False)
 
 
 # Generate the figures.
-
-n_arr = 0
 arr_key = [
     "b",
     "np",
@@ -930,7 +926,10 @@ r_bin = np.logspace(r_min, r_max, n_bin)
 
 # arr_scaled = [True, True, True, True, True, True, False, True, False, False]
 
-for i in range(0, 9):
+for i in range(8, 9):
     print(arr_key[i])
-    for scaled in [False, True]:
-        plot_msc(arr_key[i], scaled=scaled)
+    try:
+        for scaled in [False, True]:
+            plot_msc(arr_key[i], scaled=scaled)
+    except Exception as e:
+        print(e)
