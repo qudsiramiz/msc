@@ -33,7 +33,7 @@ def trace_func(df=None, key_list=None):
     kb = 1.38e-23
 
     df_omni_o = pd.read_pickle(
-        "/mnt/cephadrius/udel_research/msc/omni/data/processed/v2024.5/omni_coho1hr_merged_mag_plasma_19630101_20240401_v2024.5.p"
+        "/mnt/cephadrius/udel_research/msc/omni/data/processed/v2024.1/omni_coho1hr_merged_mag_plasma_19630101_20240401_v2024.1.p"
     )
 
     # Drop the "Epoch" and "ssepoch" columns from the DataFrame
@@ -52,6 +52,9 @@ def trace_func(df=None, key_list=None):
     df_omni_o["proton_beta"] = (
         1.0e6 * df_omni_o.np * kb * df_omni_o.Tp * 2 * mu_0 / (1e-9 * df_omni_o.bm) ** 2
     )
+
+    # Compute parker angle in radians
+    df_omni_o["parker_angle"] = np.arccos(df_omni_o.br / df_omni_o.bm)
 
     # Compute the alfven mach numver
     df_omni_o["alfven_ratio"] = 1.0e3 * df_omni_o.vp_m / df_omni_o.vA
@@ -150,6 +153,8 @@ def bin_data(
 
         for ind in range(len(r_bin) - 1):
             try:
+                # Get rid of values where the value is smaller than -1e-10
+                df[key][(df[key] < -1e-10)] = np.nan
                 dat = df[key][
                     (df.sc_r > r_bin[ind])
                     & (df.sc_r <= r_bin[ind + 1])
@@ -206,7 +211,12 @@ def bin_data(
 
 r_min = -1.4
 r_max = 2
-n_bin = 80
+# NOTE: In the previous version, n_bin was set to 80 for r_min = -1.2 and r_max = 2. However, the
+# best value for n_bin when r_min = -1.4 and r_max = 2 is 85. This was to ensure that the step sizes
+# for the two cases are as close as possible. For the first case, the step size was (2 - (-1.2)) /
+# 80, which is approximately 0.04. For the second case, the step size was (2 - (-1.4)) / 85, which is
+# approximately 0.04. The best value for n_bin was found by comparing the two step sizes.
+n_bin = 85
 r_bin = np.logspace(r_min, r_max, n_bin)
 
 scaled_values = [True, False]
@@ -215,10 +225,10 @@ binned_values = [True, False]
 for scaled in scaled_values:
     for binning in binned_values:
         fnames = np.sort(
-            glob("/mnt/cephadrius/udel_research/msc/data/merged_1hr/v2024.5/*.p")
+            glob("/mnt/cephadrius/udel_research/msc/data/merged_1hr/v2024.05/*.p")
         )
 
-        file_version = "v2024.5"
+        file_version = "v2024.05"
         df_all_l = []
 
         for f in fnames[0:]:
@@ -247,6 +257,7 @@ for scaled in scaled_values:
                     "zpn",
                     "vA",
                     "particle_flux",
+                    "parker_angle",
                     "proton_beta",
                     "alfven_ratio",
                 ]
@@ -258,14 +269,14 @@ for scaled in scaled_values:
                 df_all_l.append(df_intrp)
 
                 if binning:
-                    save_dir1 = f"/mnt/cephadrius/udel_research/msc/data/binned/scaled/{file_version}/"
+                    save_dir1 = f"/mnt/cephadrius/udel_research/msc/data/{file_version}/individual_spc/binned_scaled/"
                     # If save_dir1 doesn't exist, create it
                     Path(save_dir1).mkdir(parents=True, exist_ok=True)
                     key_list = list(df.keys())
                     df_temp = bin_data(
                         df_intrp,
                         filename=save_dir1
-                        + Path(f).name[:-10]
+                        + Path(f).name[:-11]
                         + "_%s_binned_scaled" % (n_bin),
                         filetype=["hdf", "pickle"],
                         n_bin=n_bin,
@@ -273,7 +284,7 @@ for scaled in scaled_values:
                         key_list=key_list,
                     )
             else:
-                save_dir1 = f"/mnt/cephadrius/udel_research/msc/data/binned/unscaled/{file_version}/"
+                save_dir1 = f"/mnt/cephadrius/udel_research/msc/data/{file_version}/individual_spc/binned_unscaled/"
                 # If save_dir1 doesn't exist, create it
                 Path(save_dir1).mkdir(parents=True, exist_ok=True)
                 key_list = list(df.keys())
@@ -281,7 +292,7 @@ for scaled in scaled_values:
                 if binning:
                     df_temp = bin_data(
                         df,
-                        save_dir1 + Path(f).name[:-10],
+                        save_dir1 + Path(f).name[:-11],
                         filetype=["hdf", "pickle"],
                         n_bin=n_bin,
                         file_version=file_version,
@@ -292,7 +303,7 @@ for scaled in scaled_values:
 
         df_all = pd.concat(df_all_l, sort=False)
 
-        save_dir = f"/mnt/cephadrius/udel_research/msc/data/all_data/{file_version}/"
+        save_dir = f"/mnt/cephadrius/udel_research/msc/data/{file_version}/all_data/"
         Path(save_dir).mkdir(parents=True, exist_ok=True)
         version = f"{file_version}"
         key_list = list(df_all.keys())
@@ -326,7 +337,7 @@ for scaled in scaled_values:
             )
             dfn = bin_data(
                 df_all,
-                filename=save_dir + "all_spacecraft_data",
+                filename=save_dir + f"all_spacecraft_data_{n_bin}_binned",
                 filetype=["hdf", "pickle"],
                 n_bin=n_bin,
                 file_version=file_version,

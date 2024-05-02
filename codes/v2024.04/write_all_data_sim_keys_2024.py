@@ -16,7 +16,10 @@ kb = 1.38e-23
 
 #
 data_dir = "/mnt/cephadrius/udel_research/msc/data/merged_1hr/v01/2024_version/"
-save_dir = "/mnt/cephadrius/udel_research/msc/data/merged_1hr/v2024.1"
+save_dir = "/mnt/cephadrius/udel_research/msc/data/merged_1hr/v2024.05"
+
+# If save_dir doesn't exist, create it using Path
+Path(save_dir).mkdir(parents=True, exist_ok=True)
 
 fnames = np.sort(glob(data_dir + "*.hf"))
 
@@ -73,10 +76,10 @@ for f in fnames[:]:
     df = pd.DataFrame(d)
     df.index = pd.to_datetime(df.datetime, unit="s")
 
-    try:
-        df[df.np <= 0] = np.nan
-    except Exception:
-        pass
+    # try:
+    #     df[df.np <= 0] = np.nan
+    # except Exception:
+    #     pass
 
     if "vA" in df.keys():
         print("Alfven velocity already defined")
@@ -129,8 +132,8 @@ for f in fnames[:]:
     # For omni: [56:-7]
     # For ulysses: [59:-7]
     # For all other spacecrafts: [51:-7]
-    nf = save_dir + "/" + Path(f).name[:-7] + "_v2024.1.p"
-    nf_hf = save_dir + "/" + Path(f).name[:-7] + "_v2024.1.hf"
+    nf = save_dir + "/" + Path(f).name[:-7] + "_v2024.05.p"
+    nf_hf = save_dir + "/" + Path(f).name[:-7] + "_v2024.05.hf"
 
     # Save the binned data to a pickel file using protocol 2. Avoid other
     # protocols, since protocol greater than 2 doesn't work for Python 2.*

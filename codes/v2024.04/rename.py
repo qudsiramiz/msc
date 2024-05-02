@@ -2,14 +2,17 @@ import os
 import re
 
 # Path to the root folder
-root_folder = "/home/vetinari/Desktop/git/msc/data/v2024.04"
+root_folder = "/mnt/cephadrius/udel_research/msc/data/v2024.05/"
 
 # Define patterns for old filenames and their replacements
+# patterns = {
+#     r"(.*)v2024\.5\.p$": r"\1v2024.05.p",
+#     r"(.*)v2024\.5\.hf$": r"\1v2024.05.hf",
+# }
+# Replace all __ with _
 patterns = {
-    r"(.*)v2024\.1\.p$": r"\1v2024.04.p",
-    r"(.*)v2024\.1\.hf$": r"\1v2024.04.hf",
+    r"(.*)__(.*)": r"\1_\2",
 }
-
 # Walk through all files in the folder and subfolders
 for dirpath, dirnames, filenames in os.walk(root_folder):
     for filename in filenames:

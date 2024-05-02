@@ -11,7 +11,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # matplotlib.rcParams['text.latex.preamble'] = '\usepackage{starfont} \usepackage{amsmath}'
-matplotlib.rcParams["text.latex.preamble"] = r"\usepackage{starfont}"
+# matplotlib.rcParams["text.latex.preamble"] = r"\usepackage{starfont}"
 # matplotlib.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
 # set latex use to false
 matplotlib.rc("text", usetex=True)
@@ -405,16 +405,16 @@ def plot_msc(key, scaled=True):
             shift_y = 0
             rotation = 0
 
-        fig_hist.annotate(
-            lst_lab[i],
-            (d + shift_x, y + shift_y),
-            xycoords=("data", "figure fraction"),
-            color=c,
-            size="medium",
-            horizontalalignment="center",
-            verticalalignment="bottom",
-            rotation=rotation,
-        )
+        # fig_hist.annotate(
+        #     lst_lab[i],
+        #     (d + shift_x, y + shift_y),
+        #     xycoords=("data", "figure fraction"),
+        #     color=c,
+        #     size="medium",
+        #     horizontalalignment="center",
+        #     verticalalignment="bottom",
+        #     rotation=rotation,
+        # )
 
         fig_hist.plot((d, d), hlim, color=c, linewidth=0.5, linestyle=":")
         fig_indiv.plot((d, d), ylim_indiv, color=c, linewidth=0.5, linestyle=":")
@@ -485,13 +485,13 @@ def plot_msc(key, scaled=True):
 
     if scaled:
         # p1 = "/mnt/cephadrius/udel_research/msc/data/binned/scaled/v2024.04/"
-        p1 = "../../data/v2024.04/individual_spc/binned_scaled/"
+        p1 = "../../data/v2024.05/individual_spc/binned_scaled/"
         p2 = "_coho1hr_merged_mag_plasma_"
-        p3 = "_80_binned_scaled_v2024.04.hf"
+        p3 = "_85_binned_scaled_v2024.05.hf"
     else:
-        p1 = "../../data/v2024.04/individual_spc/binned_unscaled/"
+        p1 = "../../data/v2024.05/individual_spc/binned_unscaled/"
         p2 = "_coho1hr_merged_mag_plasma_"
-        p3 = "_v2024.04.hf"
+        p3 = "_v2024.05.hf"
 
     sc_fl = [
         p1 + "psp" + p2 + "20180101_20231001" + p3,
@@ -595,12 +595,12 @@ def plot_msc(key, scaled=True):
 
     # Load data for and populate the composite.
 
-    p = "../../data/v2024.04/all_spc/all_spacecraft_data"
+    p = "../../data/v2024.05/all_data/all_spacecraft_data"
 
     if scaled:
-        dat = h5py.File(p + "_scaled_80_binned_v2024.04.hf", "r")
+        dat = h5py.File(p + "_85_binned_scaled_v2024.05.hf", "r")
     else:
-        dat = h5py.File(p + "_80_binned_v2024.04.hf", "r")
+        dat = h5py.File(p + "_85_binned_v2024.05.hf", "r")
 
     dat_r = np.array(dat["sc_r_iqr_50"])
     dat_10 = np.array(dat[dkey + "_iqr_10"])
@@ -904,10 +904,10 @@ def plot_msc(key, scaled=True):
 
     if scaled:
         # fname = 'svg/plot_scaled_' + key + '.svg'
-        fname = "../../figures/plot_scaled_" + key + ".pdf"
+        fname = "../../figures/v2024.05/plot_scaled_" + key + ".pdf"
     else:
         # fname = 'svg/plot_unscaled_' + key + '.svg'
-        fname = "../../figures/plot_unscaled_" + key + ".pdf"
+        fname = "../../figures/v2024.05/plot_unscaled_" + key + ".pdf"
 
     plt.savefig(fname, dpi=300, bbox_inches="tight", pad_inches=0.02, transparent=False)
 
@@ -928,12 +928,12 @@ arr_key = [
 ]
 r_min = -1.4
 r_max = 2
-n_bin = 80
+n_bin = 85
 r_bin = np.logspace(r_min, r_max, n_bin)
 
 # arr_scaled = [True, True, True, True, True, True, False, True, False, False]
 
-for i in range(1):
+for i in range(5):
     print(arr_key[i])
     try:
         for scaled in [False, True]:

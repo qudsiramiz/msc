@@ -64,7 +64,7 @@ def trace_func(df=None, key_list=None):
             df.index - pd.datetime(1970, 1, 1, 0, 0, 0, 0, pytz.UTC)
         ).total_seconds()
         print("Computing time done")
-    except:
+    except Exception:
         pass
 
     # Compute the time at Omni corresponding to time at the spacecraft

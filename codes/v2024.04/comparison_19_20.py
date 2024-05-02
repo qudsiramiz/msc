@@ -23,9 +23,9 @@ sc_fl_19 = [
 ]
 
 
-p1_20 = "../../data/v2024.04/individual_spc/binned_unscaled/"
+p1_20 = "../../data/v2024.05/individual_spc/binned_unscaled/"
 p2_20 = "_coho1hr_merged_mag_plasma_"
-p3_20 = "_v2024.04.p"
+p3_20 = "_v2024.05.p"
 
 sc_fl_20 = [
     p1_20 + "psp" + p2_20 + "20180101_20231001" + p3_20,
@@ -44,51 +44,64 @@ sc_fl_20 = [
 ]
 
 
-# fn_19 = sc_fl_19[9]
-# fn_20 = sc_fl_20[9]
+fn_19 = sc_fl_19[0]
+fn_20 = sc_fl_20[0]
 
-fn_19 = "/home/vetinari/Desktop/git/msc/data/all_data/merged_1hr/psp_coho1hr_merged_mag_plasma_20180101_20211001_v01.hf"
-fn_20 = "/home/vetinari/Desktop/git/msc/data/all_data/merged_1hr/psp_coho1hr_merged_mag_plasma_20180101_20231001_v01.hf"
+# Vfn_19 = "/home/vetinari/Desktop/git/msc/data/all_data/merged_1hr/psp_coho1hr_merged_mag_plasma_20180101_20211001_v01.hf"
+# Vfn_20 = "/home/vetinari/Desktop/git/msc/data/all_data/merged_1hr/psp_coho1hr_merged_mag_plasma_20180101_20231001_v01.hf"
 
-df_19 = hf.File(fn_19, "r+")
+# df_19 = hf.File(fn_19, "r+")
+#
+# df_20 = hf.File(fn_20, "r+")
 
-df_20 = hf.File(fn_20, "r+")
+df_19 = pd.read_pickle(fn_19)
 
-# df_19 = pd.read_pickle(fn_19)
-
-# df_20 = pd.read_pickle(fn_20)
+df_20 = pd.read_pickle(fn_20)
 
 arr_key = [
     "sc_r_iqr_50",
-    "b_iqr_50",
+    "bm_iqr_50",
+    "bt_iqr_50",
+    "bn_iqr_50",
+    "br_iqr_50",
     "np_iqr_50",
-    "vp_iqr_50",
-    "vpr_iqr_50",
-    "tp_iqr_50",
-    "va_iqr_50",
-    "na_iqr_50",
-    "loss_iqr_50",
-    # "ang_iqr_50",
+    "vp_m_iqr_50",
+    "vp_r_iqr_50",
+    "Tp_iqr_50",
+    "vA_iqr_50",
+    # "na_iqr_50",
+    "particle_flux_iqr_50",
+    "parker_angle_iqr_50",
     "proton_beta_iqr_50",
     "alfven_ratio_iqr_50",
 ]
-key = "bm"
-plt.figure(figsize=(10, 10))
 
-# If sc_r is smaller than 1e-10, set it to NaN.
-indx = np.where(df_20["sc_r"][:] < 0)[0]
-df_20["sc_r"][indx] = np.nan
+plt.close("all")
+for key in arr_key:
+    plt.figure(figsize=(6, 6))
 
-"""
-plt.plot(df_19["sc_r_iqr_50"], df_19[f"{key}_iqr_50"], "o", label="v19")
-plt.plot(df_20["sc_r_iqr_50"], df_20[f"{key}_iqr_50"], "d", label="v2024.04", alpha=0.5)
-plt.xscale("log")
-plt.yscale("log")
-plt.legend(loc="upper right", fontsize=15)
-plt.text(0.9, 0.75, f"{key}", transform=plt.gca().transAxes, fontsize=15)
-plt.savefig("../../figures/comparison_19_20.png")
-# plt.close()
-"""
+    # If sc_r is smaller than 1e-10, set it to NaN.
+    # indx = np.where(df_20["sc_r"][:] < 0)[0]
+    # df_20["sc_r"][indx] = np.nan
+
+    new_key = key.split("_")[0:-2]
+    if len(new_key) > 1:
+        new_key = "_".join(new_key)
+    else:
+        new_key = new_key[0]
+    plt.plot(df_19["sc_r_iqr_50"], df_19[f"{key}"], "o", label="v19")
+    plt.plot(df_20["sc_r_iqr_50"], df_20[f"{key}"], "d", label="v2024.05", alpha=0.5)
+    plt.xscale("log")
+    plt.yscale("log")
+    plt.xlabel("Distance from the Sun (AU)", fontsize=15)
+    plt.ylabel(f"{new_key}", fontsize=15)
+    plt.legend(loc="upper right", fontsize=15)
+    # plt.text(0.9, 0.75, f"{key}", transform=plt.gca().transAxes, fontsize=15)
+    plt.savefig(
+        f"../../figures/comparison_19_20_{key}.png", dpi=300, bbox_inches="tight"
+    )
+    # plt.close()
+
 # plt.plot(df_19["datetime"][:], df_19[f"{key}"][:], "o", label="v19", color="red", ms=10)
 # plt.plot(
 #     df_20["datetime"][:],
@@ -102,12 +115,14 @@ plt.savefig("../../figures/comparison_19_20.png")
 # plt.yscale("log")
 # # On the twinx axis, plot the sc_r data.
 # plt.twinx()
-plt.plot(df_19["sc_r"][:], df_19["bm"][:], "d", color="c", ms=10)
-plt.plot(df_20["sc_r"][:], df_20["bm"][:], "d", alpha=0.5, color="k", ms=5)
-
-plt.xscale("log")
-plt.yscale("log")
-plt.legend(loc="upper right", fontsize=15)
-plt.text(0.9, 0.75, f"{key}", transform=plt.gca().transAxes, fontsize=15)
-plt.savefig("../../figures/comparison_19_20.png")
-plt.show()
+# plt.plot(df_19["sc_r"][:], df_19[f"{key}"][:], "d", color="c", ms=10)
+# plt.plot(df_20["sc_r"][:], df_20[f"{key}"][:], "d", alpha=0.5, color="k", ms=5)
+#
+# plt.xscale("log")
+# plt.yscale("log")
+# plt.legend(loc="upper right", fontsize=15)
+# plt.text(0.9, 0.75, f"{key}", transform=plt.gca().transAxes, fontsize=15)
+# plt.savefig("../../figures/comparison_19_20_v2.png")
+# plt.show()
+#
+plt.close("all")
