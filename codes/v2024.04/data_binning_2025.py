@@ -36,6 +36,12 @@ def trace_func(df=None, key_list=None):
     df_omni_o = pd.read_pickle(
         "/mnt/cephadrius/udel_research/msc/omni/data/processed/v2024.1/omni_coho1hr_merged_mag_plasma_19630101_20240401_v2024.1.p"
     )
+    # If the absolute value of a parameter is more than 1e30, set it to NaN.
+    for key in df_omni_o.keys():
+        try:
+            df_omni_o.loc[(df_omni_o[key] < -1e30) | (df_omni_o[key] > 1e30), key] = np.nan
+        except Exception:
+            pass
 
     # Drop the "Epoch" and "ssepoch" columns from the DataFrame
     df_omni_o = df_omni_o.drop(columns=["Epoch", "ssepoch"])
@@ -45,9 +51,7 @@ def trace_func(df=None, key_list=None):
             continue
         df_omni_o[key][(df_omni_o[key] < -1e20) | (df_omni_o[key] > 1e20)] = np.nan
 
-    df_omni_o["particle_flux"] = (
-        (df_omni_o.np * 1e6) * (df_omni_o.vp_m * 1e3) * ((1.49e11) ** 2)
-    )
+    df_omni_o["particle_flux"] = (df_omni_o.np * 1e6) * (df_omni_o.vp_m * 1e3) * ((1.49e11) ** 2)
 
     # Compute the proton beta
     df_omni_o["proton_beta"] = (
@@ -68,9 +72,7 @@ def trace_func(df=None, key_list=None):
     ).dt.total_seconds()
 
     try:
-        t_sc_unix = (
-            df.index - pd.to_datetime("1970-01-01 00:00:00", utc=True)
-        ).total_seconds()
+        t_sc_unix = (df.index - pd.to_datetime("1970-01-01 00:00:00", utc=True)).total_seconds()
         print("Computing time done")
     except Exception:
         pass
@@ -157,9 +159,7 @@ def bin_data(
                 # Get rid of values where the value is smaller than -1e-10
                 df[key][(df[key] < -1e-10)] = np.nan
                 dat = df[key][
-                    (df.sc_r > r_bin[ind])
-                    & (df.sc_r <= r_bin[ind + 1])
-                    & (~np.isnan(df[key]))
+                    (df.sc_r > r_bin[ind]) & (df.sc_r <= r_bin[ind + 1]) & (~np.isnan(df[key]))
                 ]
 
                 # dfn[key+'_mean'][ind] = dat.mean()
@@ -225,11 +225,10 @@ binned_values = [True, False]
 
 for scaled in scaled_values:
     for binning in binned_values:
-        fnames = np.sort(
-            glob("/mnt/cephadrius/udel_research/msc/data/merged_1hr/v2024.05/*.p")
-        )
+        fnames = np.sort(glob("/mnt/cephadrius/udel_research/msc/data/merged_1hr/v2024.05/*.p"))
+        print(f"Number of files: {len(fnames)}")
 
-        file_version = "v2024.05"
+        file_version = "v2025.03"
         df_all_l = []
 
         for f in fnames[0:]:
@@ -265,6 +264,10 @@ for scaled in scaled_values:
 
                 dfr = df.copy()
 
+                # If the absolute value of a parameter is more than 1e30, set it to NaN.
+                for key in dfr.keys():
+                    dfr.loc[(dfr[key] < -1e30) | (dfr[key] > 1e30), key] = np.nan
+
                 df_intrp = trace_func(dfr, key_list=n_key_list)
 
                 df_all_l.append(df_intrp)
@@ -276,9 +279,7 @@ for scaled in scaled_values:
                     key_list = list(df.keys())
                     df_temp = bin_data(
                         df_intrp,
-                        filename=save_dir1
-                        + Path(f).name[:-11]
-                        + "_%s_binned_scaled" % (n_bin),
+                        filename=save_dir1 + Path(f).name[:-11] + "_%s_binned_scaled" % (n_bin),
                         filetype=["hdf", "pickle"],
                         n_bin=n_bin,
                         file_version=file_version,
@@ -309,9 +310,7 @@ for scaled in scaled_values:
         version = f"{file_version}"
         key_list = list(df_all.keys())
         if scaled:
-            hdf = hf.File(
-                save_dir + "all_spcaecraft_data_scaled_%s.hf" % (version), "w"
-            )
+            hdf = hf.File(save_dir + "all_spcaecraft_data_scaled_%s.hf" % (version), "w")
             for i in df_all.columns[0:]:
                 hdf.create_dataset(i, data=np.array(df_all[i]))
             hdf.close()

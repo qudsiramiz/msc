@@ -1,15 +1,17 @@
 # Import and configure the necessary modules.
+# Suppress warnings
+import warnings
+from pathlib import Path
+
 import h5py
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 
-# Suppress warnings
-import warnings
-
 warnings.filterwarnings("ignore")
-
+# Use tkagg backend for matplotlib
+matplotlib.use("tkagg")
 # matplotlib.rcParams['text.latex.preamble'] = '\usepackage{starfont} \usepackage{amsmath}'
 # matplotlib.rcParams["text.latex.preamble"] = r"\usepackage{starfont}"
 # matplotlib.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
@@ -259,13 +261,7 @@ def plot_msc(key, scaled=True):
 
     if scaled:
         ylabel_comp += (
-            r"Scaled "
-            + lab_name
-            + r", $"
-            + lab_sym
-            + r"/\langle "
-            + lab_sym
-            + r"\rangle_{\oplus}$"
+            r"Scaled " + lab_name + r", $" + lab_sym + r"/\langle " + lab_sym + r"\rangle_{\oplus}$"
         )
     else:
         if lab_unit is None:
@@ -275,7 +271,7 @@ def plot_msc(key, scaled=True):
 
     # Generate the other plot settings.
 
-    xlim = [0.05, 150.0]
+    xlim = [0.04, 150.0]
     xscale = "log"
     xlabel = r"Distance from Sun, $r$ [au]"
 
@@ -494,12 +490,12 @@ def plot_msc(key, scaled=True):
     ]
 
     if scaled:
-        # p1 = "/mnt/cephadrius/udel_research/msc/data/binned/scaled/v2024.04/"
-        p1 = "../../data/v2024.05/individual_spc/binned_scaled/"
+        p1 = "/mnt/cephadrius/udel_research/msc/data/v2024.05/individual_spc/binned_scaled/"
+        # p1 = "../../data/v2024.05/individual_spc/binned_scaled/"
         p2 = "_coho1hr_merged_mag_plasma_"
         p3 = "_85_binned_scaled_v2024.05.hf"
     else:
-        p1 = "../../data/v2024.05/individual_spc/binned_unscaled/"
+        p1 = "/mnt/cephadrius/udel_research/msc/data/v2024.05/individual_spc/binned_unscaled/"
         p2 = "_coho1hr_merged_mag_plasma_"
         p3 = "_v2024.05.hf"
 
@@ -606,7 +602,7 @@ def plot_msc(key, scaled=True):
 
     # Load data for and populate the composite.
 
-    p = "../../data/v2024.05/all_data/all_spacecraft_data"
+    p = "/mnt/cephadrius/udel_research/msc/data/v2024.05/all_data/all_spacecraft_data"
 
     if scaled:
         dat = h5py.File(p + "_85_binned_scaled_v2024.05.hf", "r")
@@ -687,9 +683,7 @@ def plot_msc(key, scaled=True):
 
     if key in ["loss", "betap"]:
 
-        fit = curve_fit(
-            mod_power, sel_r, sel_50, p0=(1.0, 0.0), sigma=sel_50 / np.sqrt(sel_num)
-        )
+        fit = curve_fit(mod_power, sel_r, sel_50, p0=(1.0, 0.0), sigma=sel_50 / np.sqrt(sel_num))
 
         crv_r = np.logspace(np.log10(xlim[0]), np.log10(xlim[1]), 300)
         crv_k = mod_power(crv_r, fit[0][0], fit[0][1])
@@ -731,9 +725,7 @@ def plot_msc(key, scaled=True):
         else:
             p0 = [1.0, 4.0, 0.0, 0.0]
 
-        fit = curve_fit(
-            mod_broken, sel_r, sel_50, p0=p0, sigma=sel_50 / np.sqrt(sel_num)
-        )
+        fit = curve_fit(mod_broken, sel_r, sel_50, p0=p0, sigma=sel_50 / np.sqrt(sel_num))
 
         crv_r = np.logspace(np.log10(xlim[0]), np.log10(xlim[1]), 300)
         crv_k = mod_broken(crv_r, fit[0][0], fit[0][1], fit[0][2], fit[0][3])
@@ -762,16 +754,10 @@ def plot_msc(key, scaled=True):
         fig_fit.set_xticks([])
         fig_fit.set_yticks([])
 
-        txt_a1 = r"$\alpha_1={:.3f} \pm {:.3f}$".format(
-            fit[0][2], np.sqrt(fit[1][2][2])
-        )
-        txt_a2 = r"$\alpha_2={:.3f} \pm {:.3f}$".format(
-            fit[0][3], np.sqrt(fit[1][3][3])
-        )
+        txt_a1 = r"$\alpha_1={:.3f} \pm {:.3f}$".format(fit[0][2], np.sqrt(fit[1][2][2]))
+        txt_a2 = r"$\alpha_2={:.3f} \pm {:.3f}$".format(fit[0][3], np.sqrt(fit[1][3][3]))
 
-        txt_rc_a = r"$r_c=\left({:.2f}\pm {:.2f}".format(
-            fit[0][1], np.sqrt(fit[1][1][1])
-        )
+        txt_rc_a = r"$r_c=\left({:.2f}\pm {:.2f}".format(fit[0][1], np.sqrt(fit[1][1][1]))
         txt_rc_b = r"\right)\,{au}$"
 
         arr_txt = [txt_rc_a + txt_rc_b, txt_a2, txt_a1]
@@ -817,14 +803,10 @@ def plot_msc(key, scaled=True):
         )
 
         if key == "na":
-            print(
-                "    Median Alfven point:", (1.0 / fit[0][0]) ** (1.0 / fit[0][3]), "au"
-            )
+            print("    Median Alfven point:", (1.0 / fit[0][0]) ** (1.0 / fit[0][3]), "au")
 
         crv_r = np.logspace(np.log10(xlim[0]), np.log10(xlim[1]), 300)
-        crv_k = mod_broken2(
-            crv_r, fit[0][0], fit[0][1], fit[0][2], fit[0][3], fit[0][4], fit[0][5]
-        )
+        crv_k = mod_broken2(crv_r, fit[0][0], fit[0][1], fit[0][2], fit[0][3], fit[0][4], fit[0][5])
         crv_k1 = mod_broken2(
             crv_r,
             fit[0][0],
@@ -878,15 +860,9 @@ def plot_msc(key, scaled=True):
         fig_fit.set_xticks([])
         fig_fit.set_yticks([])
 
-        txt_a1 = r"$\alpha_1={:.3f} \pm {:.3f}$".format(
-            fit[0][3], np.sqrt(fit[1][3][3])
-        )
-        txt_a2 = r"$\alpha_2={:.3f} \pm {:.3f}$".format(
-            fit[0][4], np.sqrt(fit[1][4][4])
-        )
-        txt_a3 = r"$\alpha_3={:.3f} \pm {:.3f}$".format(
-            fit[0][5], np.sqrt(fit[1][5][5])
-        )
+        txt_a1 = r"$\alpha_1={:.3f} \pm {:.3f}$".format(fit[0][3], np.sqrt(fit[1][3][3]))
+        txt_a2 = r"$\alpha_2={:.3f} \pm {:.3f}$".format(fit[0][4], np.sqrt(fit[1][4][4]))
+        txt_a3 = r"$\alpha_3={:.3f} \pm {:.3f}$".format(fit[0][5], np.sqrt(fit[1][5][5]))
 
         txt_ra = r"$r_a=\left({:.2f}\pm {:.2f}".format(fit[0][1], np.sqrt(fit[1][1][1]))
         txt_rb = r"$r_b=\left({:.2f}\pm {:.2f}".format(fit[0][2], np.sqrt(fit[1][2][2]))
@@ -919,33 +895,39 @@ def plot_msc(key, scaled=True):
         # fname = 'svg/plot_unscaled_' + key + '.svg'
         fname = "../../figures/v2024.05/plot_unscaled_" + key + ".pdf"
 
+    # Check if the folder exists, if not create it using pathlib.
+    path = Path(fname)
+    if not path.parent.exists():
+        path.parent.mkdir(parents=True)
+        print(f"Created directory: {path.parent}")
     plt.savefig(fname, dpi=300, bbox_inches="tight", pad_inches=0.02, transparent=False)
     plt.close()
     return dat
 
 
 # Generate the figures.
-arr_key = [
-    "zpr",
-    "b",
-    "np",
-    "vp",
-    "vpr",
-    "tp",
-    "va",
-    "na",
-    "loss",
-    "ang",
-    "proton_beta",
-    "alfven_ratio",
-]
+# arr_key = [
+#     "zpr",
+#     "b",
+#     "np",
+#     "vp",
+#     "vpr",
+#     "tp",
+#     "va",
+#     "na",
+#     "loss",
+#     "ang",
+#     "proton_beta",
+#     "alfven_ratio",
+# ]
+arr_key = ["b", "vpr"]
 r_min = -1.4
 r_max = 2
 n_bin = 85
 r_bin = np.logspace(r_min, r_max, n_bin)
 
 # arr_scaled = [True, True, True, True, True, True, False, True, False, False]
-dat = plot_msc(arr_key[0], scaled=False)
+dat = plot_msc(arr_key[1], scaled=True)
 # for i in range(1):
 #     print(arr_key[i])
 #     # try:
